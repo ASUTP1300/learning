@@ -29,10 +29,10 @@ class FindUserQuiz {
         // write your code here
 
 
-        for (User user : users) {
-            if (Optional.ofNullable(user.getAccount()).flatMap(User::getAccount).filter(u -> u.get().getId().equals(id) && u.get().getType().equals("pro")).isPresent())
-                System.out.println(user.getLogin());
-        }
+//        for (User user : users) {
+//            if (Optional.ofNullable(user.getAccount()).flatMap(User::getAccount).filter(u -> u.get().getId().equals(id) && u.get().getType().equals("pro")).isPresent())
+//                System.out.println(user.getLogin());
+//        }
     }
 
     public static Optional<User> findUserByAccountId(Set<User> users, String id) {

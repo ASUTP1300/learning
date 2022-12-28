@@ -21,7 +21,6 @@ public class Main {
         Date date1 = TEXT_FORMATTER.parse("15-03-2020 10:20:34");
         Date date2 = TEXT_FORMATTER.parse("14-03-2020 10:20:34");
 
-
         String str = "Hello, my name is Ruslan Manasipov";
         System.out.println(str.substring(0,30));
         strings.replaceAll(s -> s.substring(0, 2));
