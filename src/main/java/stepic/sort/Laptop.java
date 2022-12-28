@@ -1,6 +1,12 @@
 package stepic.sort;
 
 import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.IntPredicate;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Laptop {
     private final String brand;
@@ -121,62 +127,90 @@ class LongRange {
 }
 class Main {
     public static void main(String[] args) {
+
+        learn(x -> System.out.println("Число:" +  x));
+
+        List<Integer> spendings = List.of(12, 1, 345, 1);
+        System.out.println("Сумма - " + spendings.stream().reduce(Integer::sum).get());
         List<Laptop> laptops = new ArrayList<>(List.of(
                 new Laptop("HP", 4, 15.6),
+                new Laptop("HP", 3, 15.6),
                 new Laptop("Apple", 6, 15.6),
                 new Laptop("Asus", 4, 14.1),
                 new Laptop("Dell", 8, 17.0),
                 new Laptop("OLD but work", 1, 15.1)));
 
 
-        Comparator<Laptop> byNumberCores = Comparator.comparingInt(Laptop::getNumberOfCores);
-        laptops.sort(byNumberCores);
-        laptops.forEach(System.out::println);
-
-        List<String> strings = new ArrayList<>(List.of("Mother", "I", "Brother", "Sister", "Son"));
-        Comparator<String> stringComparator1 = (s1, s2) -> Integer.compare(s2.length(), s1.length());
-
-        strings.sort(stringComparator1);
-        System.out.println("First way:");
-        strings.forEach(System.out :: println);
-        System.out.println("-----\n");
-
-        strings.sort(Comparator.naturalOrder());
-        System.out.println("Second way:");
-        strings.forEach(System.out :: println);
-        System.out.println("-----\n");
-
-        strings.sort(Comparator.comparingInt(String::length));
-        System.out.println("Third way:");
-        strings.forEach(System.out :: println);
-        System.out.println("-----\n");
-
-        //This method sorts laptops by number of cores descending and if number is the same for several objects,
-        //also sorts them by display size ascending
-        laptops.sort(Comparator
-                .comparing(Laptop::getNumberOfCores, Comparator.reverseOrder())
-                .thenComparingDouble(Laptop::getDisplaySize));
-        System.out.println("Sort by cores and display size:");
-        laptops.forEach(System.out::println);
-        System.out.println("-----\n");
+        System.out.println(Math.pow(4, 2));
+        Comparator<Laptop> laptopComparator = Comparator.comparing(Laptop::getBrand);
+        Set<Laptop> laptopSet = new TreeSet<Laptop>(laptopComparator);
+        laptopSet.addAll(laptops);
 
 
-        //ACCOUNTS
-        List<Account> accounts = new ArrayList<>(List.of(
-                new Account("Ruslan", true, 1),
-                new Account("Dima", true, 1),
-                new Account("Avik", true, 1)
-        ));
+//        Arrays.stream().
 
-        //Sort by locked
-        accounts.sort(Comparator.comparing(Account::isLocked, Comparator.reverseOrder())
-                .thenComparing(Account::getBalance, Comparator.reverseOrder())
-                .thenComparing(Account::getOwner));
-        accounts.forEach(System.out :: println);
 
-        System.out.println(Integer.compare((6), 4));
+        laptopSet.forEach(x -> System.out.println("Set item " + x));
+
+
+          //          Collector<Laptop, Laptop, TreeSet<Laptop>>
+//
+
+        IntPredicate predicate = x -> true;
+//        predicate.
+
+
+
+//        List<String> strings = new ArrayList<>(List.of("Mother", "I", "Brother", "Sister", "Son"));
+//        Comparator<String> stringComparator1 = (s1, s2) -> Integer.compare(s2.length(), s1.length());
+//
+//        strings.sort(stringComparator1);
+//        System.out.println("First way:");
+//        strings.forEach(System.out :: println);
+//        System.out.println("-----\n");
+//
+//        strings.sort(Comparator.naturalOrder());
+//        System.out.println("Second way:");
+//        strings.forEach(System.out :: println);
+//        System.out.println("-----\n");
+//
+//        strings.sort(Comparator.comparingInt(String::length));
+//        System.out.println("Third way:");
+//        strings.forEach(System.out :: println);
+//        System.out.println("-----\n");
+//
+//        //This method sorts laptops by number of cores descending and if number is the same for several objects,
+//        //also sorts them by display size ascending
+//        laptops.sort(Comparator
+//                .comparing(Laptop::getNumberOfCores, Comparator.reverseOrder())
+//                .thenComparingDouble(Laptop::getDisplaySize));
+//        System.out.println("Sort by cores and display size:");
+//        laptops.forEach(System.out::println);
+//        System.out.println("-----\n");
+
+//
+//        //ACCOUNTS
+//        List<Account> accounts = new ArrayList<>(List.of(
+//                new Account("Ruslan", true, 1),
+//                new Account("Dima", true, 1),
+//                new Account("Avik", true, 1)
+//        ));
+//
+//        //Sort by locked
+//        accounts.sort(Comparator.comparing(Account::isLocked, Comparator.reverseOrder())
+//                .thenComparing(Account::getBalance, Comparator.reverseOrder())
+//                .thenComparing(Account::getOwner));
+//        accounts.forEach(System.out :: println);
+//
+//        System.out.println(Integer.compare((6), 4));
+
 
     }
+    static void learn(Example example){
+        example.test(12);
+    }
 
-
+    interface Example {
+        void test(Integer num);
+    }
 }

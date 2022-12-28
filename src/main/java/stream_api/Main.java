@@ -3,6 +3,7 @@ package stream_api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -25,8 +26,7 @@ public class Main {
 
         Map<String, Long> map2 = workers.stream().collect(Collectors.groupingBy(Worker::getName, Collectors.counting()));
 
-
-
+        Set<String> stringSet = workers.stream().map(Worker::getName).collect(Collectors.toSet());
 
 
 
