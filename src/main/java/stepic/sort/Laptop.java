@@ -1,12 +1,7 @@
 package stepic.sort;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
 import java.util.function.IntPredicate;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class Laptop {
     private final String brand;
@@ -83,7 +78,7 @@ class LongRange {
 
     public static Comparator<LongRange> getComparator() {
         // write your code her
-        Comparator<LongRange> longRangeComparator = (r1, r2) -> Long.compare(r1.getLeft() - r1.getRight(), r2.getLeft() - r2.getRight());
+        Comparator<LongRange> longRangeComparator = Comparator.comparingLong(r -> r.getLeft() - r.getRight());
 
         return longRangeComparator.thenComparing(LongRange::getLeft);
         //Comparator.comparing( r -> r.getLeft() - r.getRight()).thenComparing(LongRange::getLeft);

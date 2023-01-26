@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor User
+User -> MainReportView : button "Сформировать акт сверки"
+MainReportView -> ReconActCreateReportWindow : + ReconActCreateReportWindow(\n\t reportGenerateService:ReportGenerateService,\n\t contractService:ContractSearchItemServiceUI\n  )
+ReconActCreateReportWindow -> ReconActCreateReportWindow : - validateAndGenerate(type : ReportGeneratorType = ReportGeneratorType.//**DOWNLOAD**//) : void
+ReconActCreateReportWindow -> ReconActCreateReportWindow : - prepareAndValidate() : boolean
+ReconActCreateReportWindow -> ReconActCreateReportWindow : - executeReport(type : ReportGeneratorType = ReportGeneratorType.//**DOWNLOAD**//) : void
+
+ReconActCreateReportWindow -> ReportGenerateService : + generateReconActReport(contract : ContractReportRequest, startDate : Date , endDate : Date) : File ;
+ReportGenerateService -> ReportGenerateService : - generateReport(\n\t fmrName : ReportFormatNames = ReportFormatNames.//**RECON_ACT_REPORT**//,\n\t filePrefix : String, \n\t parameters :  List<Pair<String, Object>>,\n\t data : Map<String, List<Map<String, Object>>> \n  ) : File
+'Bob --> Alice: Authentication Response
+'
+'Alice -> Bob: Another authentication Request
+'Alice <-- Bob: another authentication Response
+@enduml
