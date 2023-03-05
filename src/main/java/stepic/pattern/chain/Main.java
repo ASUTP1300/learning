@@ -89,6 +89,13 @@ class ChainOfResponsibilityDemo {
 
     // Don't change the code below
     public static void main(String[] args) throws Exception {
+        Object o1 = null;
+        Object o2 = null;
+
+
+        System.out.println("o1 equals o2 " + o1.equals(o2));
+
+
 //        final Scanner scanner = new Scanner(System.in);
 //        final String requestData = scanner.nextLine();
 //        final Request notCompletedRequest = new Request(requestData);

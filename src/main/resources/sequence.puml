@@ -1,0 +1,72 @@
+@startuml
+!definelong NEW_PAGE(obj)
+    autonumber
+    === obj ==
+!enddefinelong
+
+database ARFIX as "ARFIX(postgres)"
+database ATLANT as "ATLANT(oracle)"
+
+participant "arfix-fiscal-producer"
+participant "atlant-fiscal-producer"
+
+participant "fiscal-loader"
+
+queue Kafka
+queue "glassfish-fiscalisation"
+
+NEW_PAGE("arfix fiscalisation")
+
+loop every N time
+    "arfix-fiscal-producer" -> ARFIX : select * from arfixfisk.arfixfisk where copayment > :last_done limit :limit
+    "arfix-fiscal-producer" <- ARFIX : array[copayments]
+    "arfix-fiscal-producer" -> ARFIX: insert array[copayments] -> arfixfisk.send_payments with status = NEW
+end
+loop every M time
+    "arfix-fiscal-producer" -> ARFIX : select * from arfixfisk.send_payments where status in (NEW,RETRY) limit:limit
+    loop each copayment
+        "arfix-fiscal-producer" -> Kafka : PaymentDTO(with type=ARFIX)
+        Kafka -> "fiscal-loader": PaymentDTO
+        "fiscal-loader" -> "glassfish-fiscalisation": FiscalPaymentDTO
+    end
+end
+
+
+NEW_PAGE("atlant fiscalisation")
+
+loop every N time
+    "atlant-fiscal-producer" -> ATLANT : select * from atlant.payments_fiz_v where copayment > :last_done limit :limit
+    "atlant-fiscal-producer" <- ATLANT : array[copayments]
+    "atlant-fiscal-producer" -> ATLANT: insert array[copayments] -> send_payment with status = NEW
+end
+loop every M time
+    "atlant-fiscal-producer" -> ATLANT : select * from send_payment  where status in (NEW,RETRY) limit:limit
+    loop each copayment
+        "atlant-fiscal-producer" -> Kafka : PaymentDTO(with type=ATLANT)
+        Kafka -> "fiscal-loader": PaymentDTO
+        "fiscal-loader" -> "glassfish-fiscalisation": FiscalPaymentDTO
+    end
+end
+
+NEW_PAGE("- RETRY -")
+NEW_PAGE("retry arfix fiscalisation")
+
+"arfix-fiscal-producer" -> Kafka :@topic-for-payments, payload=PaymentDTO(with type=ARFIX)
+Kafka -> "fiscal-loader": PaymentDTO
+"fiscal-loader" -> "glassfish-fiscalisation": FiscalPaymentDTO
+"fiscal-loader" <[#FF0000]- "glassfish-fiscalisation": Failed
+"fiscal-loader" -> Kafka: @topic-for-fails, payload=PaymentDTO(copayment)
+Kafka -> "arfix-fiscal-producer": @topic-for-fails, payload=FailedPaymentDTO(copayment,type) | filter type=ARFIX
+"arfix-fiscal-producer" -> ARFIX: update send_payment set status=RETRY where copayment=:copayment
+
+NEW_PAGE("retry atlant fiscalisation")
+
+"atlant-fiscal-producer" -> Kafka :@topic-for-payments, payload=PaymentDTO(with type=ATLANT)
+Kafka -> "fiscal-loader": PaymentDTO
+"fiscal-loader" -> "glassfish-fiscalisation": FiscalPaymentDTO
+"fiscal-loader" <[#FF0000]- "glassfish-fiscalisation": Failed
+"fiscal-loader" -> Kafka: @topic-for-fails, payload=PaymentDTO(copayment)
+Kafka -> "atlant-fiscal-producer": @topic-for-fails, payload=FailedPaymentDTO(copayment,type) | filter type=ATLANT
+"atlant-fiscal-producer" -> ATLANT: update send_payment set status=RETRY where copayment=:copayment
+
+@enduml

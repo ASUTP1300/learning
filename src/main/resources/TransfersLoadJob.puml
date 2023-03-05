@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autonumber
+
+title transfers load job
+actor Schedule
+<style>
+node {
+        Padding 12
+        Margin 3
+        HorizontalAlignment center
+        LineColor blue
+        LineThickness 3.0
+        BackgroundColor gold
+        RoundCorner 40
+        MaximumWidth 100
+        }
+ </style>
+
+participant "**transfersLoadJob** : TransfersLoadJob" as trns
+participant "**transfersService** : TransfersService"
+participant "**reportPeriodService** : ReportPeriodService"
+participant "**catalogsService** : BankCatalogsService" as ctlsr
+participant "**authenticationService** : UserAuthenticationService" as auth
+participant "**remoteClient : RemoteFilesClient**"
+
+
+"Schedule" -> trns: executeJob(jobExecutionContext : JobExecutionContext) : void
+group executeJob(..)
+
+    group authenticateJobUser(..)
+ trns -> trns: authenticateJobUser(authenticationService : UserAuthenticationService,\n\tkernelLogger : Logger,\n\tuserName : String,\n\tpassword : String) :  void
+ trns -> auth: authenticateUser(authenticationRequest : Authentication ) : void
+        end
+
+ trns ->  ctlsr: getBanks() : List<Bank>
+end
+'Bob --> Alice: Authentication Response
+'
+'Alice -> Bob: Another authentication Request
+'Alice <-- Bob: another authentication Response
+
+
+@enduml

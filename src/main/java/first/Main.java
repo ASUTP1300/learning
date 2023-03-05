@@ -33,6 +33,7 @@ public class Main {
         if (max < count) {
             max = count;
         }
+
         return max;
     }
 
