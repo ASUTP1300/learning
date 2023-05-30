@@ -1,0 +1,130 @@
+@startuml
+
+!definelong NEW_PAGE(obj)
+   == obj ==
+   autonumber
+!enddefinelong
+
+participant JobCollectorDebtBillsTrigger
+/ note over JobCollectorDebtBillsTrigger
+    manual/cron
+end note
+
+participant CollectorBillProducer
+/ note over CollectorBillProducer
+    является Listener-ом запуска job-ов
+    только определяем список
+    неоплаченных счетов
+end note
+
+participant JobManager
+/ note over JobManager
+   управляет запуском job-ов
+   определяет завершилась
+   job или нет
+end note
+
+box Kafka #gray
+    participant job_management
+    participant job_runs
+    participant debt_bills
+end box
+
+box DB
+    participant ArfixDbCore
+    participant ArfixCFFDb
+    participant cff_job_DB
+end box
+
+participant DebtAccountListener
+/ note over DebtAccountListener
+    обрабатываем неоплаченные платежи
+end note
+participant AccountDebtService
+
+
+
+NEW_PAGE(job(producer))
+JobCollectorDebtBillsTrigger -> job_management : {action:start, args:{job=BillDebtJob}}
+job_management -> JobManager : {action:start, args:{job=BillDebtJob}}
+alt job already runned? == true
+    JobManager -> cff_job_DB: active job exists
+    note over JobManager
+        (do nothing)
+    end note
+end
+JobManager -> JobManager: generate $run_id
+JobManager -> cff_job_DB: insert into jobs(BillDebtJob, $run_id)
+JobManager -> job_runs: {action:start, run_id:$run_id}
+job_runs -> CollectorBillProducer:{action:start, run_id:$run_id}
+
+note over CollectorBillProducer
+    listen: /job-runs/
+end note
+CollectorBillProducer -> job_management: {action:CHANGE_STATE, run_id:$run_id, args:{state: PREPARE_DATA}}
+job_management -> JobManager: {action:CHANGE_STATE, run_id:$run_id, args:{state: PREPARE_DATA}}
+
+alt all success
+CollectorBillProducer -> ArfixDbCore : getCollectorDebtBills()
+note over CollectorBillProducer
+    * long process
+end note
+CollectorBillProducer <- ArfixDbCore : Stream<debtBill>
+loop each debtBill
+    CollectorBillProducer -> debt_bills: {run_id=$run_id,cobill:$debtBill}
+    note over CollectorBillProducer
+        (task for consumer)
+        * fast send
+    end note
+    CollectorBillProducer -> CollectorBillProducer: prepared_count++
+    end
+CollectorBillProducer -> job_management: {action:PREPARED, run_id:$run_id, args={prepared_count=$prepared_count}}
+job_management -> JobManager : {action:PREPARED, run_id:$run_id, args={prepared_count=$prepared_count}}
+else #red smth failed
+CollectorBillProducer -> job_management: {action:FAILED, run_id:$run_id, args={prepared_count=$prepared_count}}
+job_management -> JobManager : {action:FAILED, run_id:$run_id, args={prepared_count=$prepared_count}}
+end
+
+
+NEW_PAGE(pool of consumers)
+
+note over DebtAccountListener
+listen: /debt_bills/
+end note
+DebtAccountListener <- debt_bills: {run_id=$run_id,cobill:$debtBill}
+DebtAccountListener -> AccountDebtService: handle($debtBill)
+AccountDebtService -> cff_job_DB: get job status
+note over AccountDebtService
+   (запросить jobManager ???)
+   (если не доступен, продолжаем - ?)
+end note
+note over AccountDebtService #red
+    если PREPARED падаем (перечитываем сообщение)
+end note
+note over AccountDebtService
+   возможная оптимизация если run_id не активен
+   добавить в Map (cache) - чтобы завершенную job
+   завершить быстрее
+end note
+alt #pink 'job is not active'
+note over DebtAccountListener
+   (do nothing)
+end note
+else #lightgreen job is active
+    AccountDebtService -> ArfixCFFDb: lock($debtBill)
+    AccountDebtService -> ArfixDbCore: getExtendedInfo($debtBill)
+    AccountDebtService <- ArfixDbCore: ExtendedDebtAccount
+    AccountDebtService -> AccountDebtService: save/update bill in cff db
+    alt #red "on fail handing"
+        AccountDebtService -> job_management : {action:INC_FAILED, run_id:$run_id}
+        job_management -> JobManager : {action:INC_FAILED, run_id:$run_id}
+        AccountDebtService -> ArfixCFFDb: unlock($debtBill)
+    end
+    AccountDebtService -> job_management : {action:INC_HANDLED, run_id:$run_id}
+    job_management -> JobManager : {action:INC_HANDLED, run_id:$run_id}
+    AccountDebtService -> ArfixCFFDb: unlock($debtBill)
+end
+
+
+
+@enduml

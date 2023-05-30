@@ -14,19 +14,14 @@ public class Main {
     Function<String, String> stringConsumer = String::toLowerCase;
 
     public static void main(String[] args) throws ParseException {
-        List<String> stringList = List.of("A33", "B333", "C3333");
-        List<String> strings = new ArrayList<>(stringList);
+
         //stringList.remove(0);
-        SimpleDateFormat TEXT_FORMATTER = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        Date date1 = TEXT_FORMATTER.parse("15-03-2020 10:20:34");
-        Date date2 = TEXT_FORMATTER.parse("14-03-2020 10:20:34");
+        SimpleDateFormat TEXT_FORMATTER = new SimpleDateFormat("dd-MM-yyyy");
+        Date date1 = TEXT_FORMATTER.parse("15-03-2020");
+        Date date2 = TEXT_FORMATTER.parse("14-03-2020");
 
-        String str = "Hello, my name is Ruslan Manasipov";
-        System.out.println(str.substring(0,30));
-        strings.replaceAll(s -> s.substring(0, 2));
 
-        System.out.printf("[%s]",str);
-
+        System.out.println(LocalDate.of(2023, 4, 14));
 
 
     }

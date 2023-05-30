@@ -12,7 +12,25 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class Main {
+public class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Main {
     public static void main(String[] args) {
         List<XmlFile> xmlFiles = List.of(
                 new XmlFile("1", "UTF-8", List.of(new Tag("function"), new Tag("load"))),

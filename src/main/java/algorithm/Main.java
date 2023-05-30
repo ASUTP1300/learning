@@ -8,7 +8,7 @@ public class Main {
 
         for(int i = 1; i < 100; i++){
             if(checkNumber(i)){
-                System.out.println("РџСЂРѕСЃС‚РѕРµ С‡РёР»РѕСЃ:\t" + i);
+                System.out.println("Простое чилос:\t" + i);
             }
         }
 
@@ -46,7 +46,7 @@ public class Main {
 
     static int[] rotateArray(int[] a, int pivot){
         if(pivot > a.length - 1 || pivot < 0){
-            throw new RuntimeException("РћС€РёР±РєР°, РЅРµРєРѕСЂСЂРµРєС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ pivot");
+            throw new RuntimeException("Ошибка, некорректное значение pivot");
         }
         int w = 0;
         for(int i = 0; i < pivot; i++){
@@ -64,10 +64,10 @@ public class Main {
 
         while (r >= l){
             int m = (r + l)/2;
-            System.out.printf("Р—РЅР°С‡РµРЅРёРµ m: %s\n", m);
+            System.out.printf("Значение m: %s\n", m);
             if(target == a[m]){
                 long stop = System.currentTimeMillis();
-                System.out.println("Р’СЂРµРјСЏ РІС‹РїРѕР»РЅРµРЅРёСЏ " + (stop - start));
+                System.out.println("Время выполнения " + (stop - start));
                 return m;
             }
             if(target < a[m]){
@@ -78,7 +78,7 @@ public class Main {
             }
         }
         long stop = System.currentTimeMillis();
-        System.out.println("Р’СЂРµРјСЏ РІС‹РїРѕР»РЅРµРЅРёСЏ: " + (stop - start));
+        System.out.println("Время выполнения: " + (stop - start));
         return -1;
     }
 

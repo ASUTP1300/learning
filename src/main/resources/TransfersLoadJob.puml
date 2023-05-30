@@ -34,6 +34,9 @@ group executeJob(..)
         end
 
  trns ->  ctlsr: getBanks() : List<Bank>
+ group processFileAsBankBIC
+ trns -> trns: void processFileAsBankBIC(banks : List<Bank>, file: File)
+ end
 end
 'Bob --> Alice: Authentication Response
 '

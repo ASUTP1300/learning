@@ -3,6 +3,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
@@ -11,8 +13,14 @@ public class Main {
         Comparator<Character> characterComparator = Character::compareTo;
         Character cr = 'a';
 
-        str.chars().sorted().forEach(System.out::println);
 
+
+        Pattern pattern = Pattern.compile("[0-9]{25}");
+
+        String validStr = "40706810600000105977";
+        System.out.println("Длина строки " + validStr.length());
+
+        System.out.println(pattern.matcher(validStr).matches());
     }
 
 
