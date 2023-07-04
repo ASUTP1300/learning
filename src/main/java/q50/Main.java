@@ -2,11 +2,11 @@ package q50;
 
 public class Main {
     public static void main(String[] args) {
-        String str1 = "A";
-        String str2 = "B";
+        long l = 100512;
 
-        System.out.println(String.join("|", str1, str2));
-       // fibonacci(5);
+        System.out.println((double) l / 100);
+
+
     }
 
     static void fibonacci(int num){

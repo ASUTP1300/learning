@@ -35,10 +35,10 @@ public class NodeReverse {
         Node prev = null;
 
         while(curr != null) {
-            next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
+            next = curr.next;//2,3,4
+            curr.next = prev;//null,1,2
+            prev = curr;//1,2
+            curr = next;//2,3
         }
         return prev;
     }
