@@ -1,0 +1,7 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+!includesub abstract_load_job.puml!ABSTRACT_JOB_DEFINITION_MACRO
+!includesub abstract_load_job.puml!PAGE_CONTROL
+
+AbstractJobDefinition(Aade, eAfe, Sfe, sdw)
+@enduml

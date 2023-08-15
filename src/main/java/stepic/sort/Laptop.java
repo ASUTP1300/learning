@@ -211,6 +211,8 @@ class Main {
     }
 
     interface Example {
+
+        int c = 12;
         void test(Integer num);
     }
 }

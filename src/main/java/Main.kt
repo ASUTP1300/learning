@@ -1,22 +1,30 @@
-import java.util.function.Function
-import java.util.stream.Collectors
+import java.util.TreeSet
 
 fun main(args: Array<String>) {
+    val debtsAre = listOf(Debt(1, 200), Debt(2, 300))
+    val debtComes = listOf(Debt(1, 100), Debt(3, 300))
 
-    val man1 = Man(name = "Ruslan", age = 32L)
-    val man2 = Man(name = "Tarlan", age = 31L)
-    val man3 = Man(name = "Dima", age = 31L)
+    //{Debt(1, 200), Debt(2, 300)} - table billInDebt -> ::removeIf -> {Debt(2, 300)} -> to upset 0 - на обнуление
 
-    val listMan = listOf(man1, man2, man3)
-
-    val map: Map<Man, Long> =
-        listMan.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-    val map2 = listMan.map { it to it.age }.toMap()
+    //{Debt(1, 100), Debt(3, 300), Debt(1, 200)} - debt-info-s ->  -> to upset save/update
 
 
-    val manFinish = map.entries.stream().min { x1, x2 -> x1.value.compareTo(x2.value) }.get().key
-    println(manFinish)
+
+    val comparator: Comparator<Debt> = Comparator.comparing(Debt::id).thenComparing(Comparator.comparing(Debt::debt))
+    val debtSet = TreeSet(comparator)
+
+//    debtSet.addAll(debtComes)
+
+    debtSet.add(Debt(1, 200))
+    debtSet.add(Debt(1, 200))
+
+    println("TreeSet is - $debtSet")
+
+
+
+
 }
+
 
 
 class Man(
@@ -26,5 +34,14 @@ class Man(
 ) {
     override fun toString(): String {
         return "Man(name='$name', age=$age)"
+    }
+}
+
+class Debt(
+    val id: Long,
+    val debt: Long
+) {
+    override fun toString(): String {
+        return "Debt(id=$id, debt=$debt)"
     }
 }

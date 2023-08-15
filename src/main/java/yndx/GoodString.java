@@ -6,35 +6,38 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GoodString {
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("input.txt"));
-        Writer writer = new FileWriter("output.txt");
-
-        int n = Integer.parseInt(br.readLine());
-
-        int[] ar = new int[n];
-        int i = 0;
-        while (i < n) {
-            ar[i] = Integer.parseInt(br.readLine());
-            i++;
-        }
-
-        int buf = 0;
-        long d = 0;
-        for (int j = 0; j < ar.length - 1; j++) {
-            d += ar[j] >= ar[j + 1] ? ar[j + 1] : ar[j];
+        List<Man> men = List.of(new Man("Rus", 21), new Man("Rus",31), new Man("Tarlan", 38), new Man("Tarlan",50));
 
 
-            System.out.println("a[j]: " + ar[j] + " a[j + 1]: " + ar[j + 1]);
-
-        }
-        writer.write(String.valueOf(d));
-        writer.flush();
-        System.out.println("d " + d);
-        System.out.println(Arrays.toString(ar));
-        System.out.println(Integer.MAX_VALUE);
+//       Map<String, Integer> map = men.stream().collect(Collectors.groupingBy(x -> x.name, Collectors.mapping(x2 -> x2.age, Collectors.summingInt(x3 -> -1 * x3))));
+            men.forEach(x -> x.age *= -1);
+         men.forEach(System.out::println);
+//        System.out.println(map);
     }
+
+
+   static class Man {
+
+        String name;
+        int age;
+
+       public Man(String name, int age) {
+           this.name = name;
+           this.age = age;
+       }
+
+       @Override
+       public String toString() {
+           return "Man{" +
+                   "age=" + age +
+                   '}';
+       }
+   }
 
 }

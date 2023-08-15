@@ -32,6 +32,8 @@ public class
 
 Main {
     public static void main(String[] args) {
+
+
         List<XmlFile> xmlFiles = List.of(
                 new XmlFile("1", "UTF-8", List.of(new Tag("function"), new Tag("load"))),
                 new XmlFile("2", "UTF-8", List.of(new Tag("table"), new Tag("main"))),
