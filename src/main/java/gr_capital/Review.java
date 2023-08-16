@@ -4,21 +4,53 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.util.stream.IntStream;
 
 public class Review {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        int[] a = new int[1];
 
-        List<String> strings = List.of("AB", "BA", "EC");
+        AtomicIntegerArray aM = new AtomicIntegerArray(1);
 
-        strings.stream()
-                .sorted(Comparator.comparing(s -> s.substring(1)))
-                .forEach(s -> System.out.println("String " + s));
 
-        Int int1 = Int.valueOf(125);
-        Int int2 = Int.valueOf(-1);
-        Int int3 = Int.valueOf(257);
+        Thread th1 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> incrementArrayElement(0, a)));
+        Thread th2 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> incrementArrayElement(0, a)));
+        Thread th3 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> incrementArrayElement(0, a)));
+
+        Thread th4 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> aM.getAndIncrement(0)));
+        Thread th5 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> aM.getAndIncrement(0)));
+        Thread th6 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> aM.getAndIncrement(0)));
+
+
+
+
+
+        th1.start();
+        th2.start();
+        th3.start();
+
+        th4.start();
+        th5.start();
+        th6.start();
+
+        th1.join();
+        th2.join();
+        th3.join();
+
+        th4.join();
+        th5.join();
+        th6.join();
+
+        System.out.println("Typically array : " + Arrays.toString(a));
+        System.out.println("Concurrent array : " + aM.get(0));
     }
+
+    synchronized static void incrementArrayElement(int index, int[] a){
+        a[index] += 1;
+    }
+
 
     static void aboutStrings() {
         String str1 = "String1";
@@ -44,7 +76,8 @@ class Int {
         this.value = value;
     }
 
-    private static Int[] cache = new Int[256];
+    private static ConcurrentSkipListSet<Int> curList = new ConcurrentSkipListSet<>();
+    static private Int[] cache = new Int[256];
 
     static {
         IntStream.rangeClosed(-128, 127).forEach(n -> {
