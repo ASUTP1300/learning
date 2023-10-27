@@ -17,22 +17,9 @@ public class
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 Main {
     public static void main(String[] args) {
-
+        System.out.println(Stream.of(1, 2, 3).peek(System.out::println).count());
 
         List<XmlFile> xmlFiles = List.of(
                 new XmlFile("1", "UTF-8", List.of(new Tag("function"), new Tag("load"))),

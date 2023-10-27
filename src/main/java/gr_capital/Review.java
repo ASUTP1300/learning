@@ -1,53 +1,71 @@
 package gr_capital;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Review {
     public static void main(String[] args) throws InterruptedException {
         int[] a = new int[1];
-
-        AtomicIntegerArray aM = new AtomicIntegerArray(1);
-
-
-        Thread th1 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> incrementArrayElement(0, a)));
-        Thread th2 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> incrementArrayElement(0, a)));
-        Thread th3 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> incrementArrayElement(0, a)));
-
-        Thread th4 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> aM.getAndIncrement(0)));
-        Thread th5 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> aM.getAndIncrement(0)));
-        Thread th6 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> aM.getAndIncrement(0)));
-
-
-
-
-
-        th1.start();
-        th2.start();
-        th3.start();
-
-        th4.start();
-        th5.start();
-        th6.start();
-
-        th1.join();
-        th2.join();
-        th3.join();
-
-        th4.join();
-        th5.join();
-        th6.join();
-
-        System.out.println("Typically array : " + Arrays.toString(a));
-        System.out.println("Concurrent array : " + aM.get(0));
+        get_result(a);
+//        AtomicIntegerArray aM = new AtomicIntegerArray(1);
+//
+//
+//        Thread th1 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> incrementArrayElement(0, a)));
+//        Thread th2 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> incrementArrayElement(0, a)));
+//        Thread th3 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> incrementArrayElement(0, a)));
+//
+//        Thread th4 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> aM.getAndIncrement(0)));
+//        Thread th5 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> aM.getAndIncrement(0)));
+//        Thread th6 =  new Thread(() -> IntStream.range(0, 25000).forEach(i -> aM.getAndIncrement(0)));
+//
+//
+//        th1.start();
+//        th2.start();
+//        th3.start();
+//
+//        th4.start();
+//        th5.start();
+//        th6.start();
+//
+//        th1.join();
+//        th2.join();
+//        th3.join();
+//
+//        th4.join();
+//        th5.join();
+//        th6.join();
+//
+//        System.out.println("Typically array : " + Arrays.toString(a));
+//        System.out.println("Concurrent array : " + aM.get(0));
     }
 
-    synchronized static void incrementArrayElement(int index, int[] a){
+    public static int get_result(int[] ground) {
+        int out = 0;
+        int in = 0;
+        int count = 0;
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < ground.length; i++) {
+            for (int j = i + 1; j < ground.length; j++) {
+                out = ground[i];
+                in = ground[j];
+                while (out > in) {
+                    in++;
+                    count++;
+                }
+                while (out < in) {
+                    in--;
+                    count++;
+                }
+            }
+            min = Math.min(min, count);
+        }
+        return min;
+    }
+
+    synchronized static void incrementArrayElement(int index, int[] a) {
         a[index] += 1;
     }
 

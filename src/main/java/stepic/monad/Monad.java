@@ -1,7 +1,9 @@
 package stepic.monad;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 public interface Monad<T> {
 
@@ -89,16 +91,24 @@ class Calculator<T extends Number> {
 
 class Main {
     public static void main(String[] args) {
-        Calculator.of(12)
-                .consume(System.out::println)
-                .eval(v -> v / 0)
-                .consume(System.out::println);
 
 
-        Calculator.of(10) // init calculator with the default value 10
-                .eval(value -> value + 5)      // evaluates a new expression: 15
-                .consume(System.out::println)  // shows the current value 15
-                .eval(value -> null) // makes the value null
-                .consume(System.out::println); // doesn't print anything
+        IntStream stream = IntStream.iterate(1, x -> x <= 10, x -> x + 1);
+        System.out.println("min " + stream.min());
+        System.out.println("max " + stream.max());
+
+//        AtomicInteger
+//
+//        Calculator.of(12)
+//                .consume(System.out::println)
+//                .eval(v -> v / 0)
+//                .consume(System.out::println);
+//
+//
+//        Calculator.of(10) // init calculator with the default value 10
+//                .eval(value -> value + 5)      // evaluates a new expression: 15
+//                .consume(System.out::println)  // shows the current value 15
+//                .eval(value -> null) // makes the value null
+//                .consume(System.out::println); // doesn't print anything
     }
 }

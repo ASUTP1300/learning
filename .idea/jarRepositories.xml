@@ -56,5 +56,10 @@
       <option name="name" value="datanucleus" />
       <option name="url" value="https://datanucleus.org/downloads/maven2/oracle" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="cv" />
+      <option name="name" value="cv" />
+      <option name="url" value="https://clojars.org/repo/" />
+    </remote-repository>
   </component>
 </project>

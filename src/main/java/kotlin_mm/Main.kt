@@ -1,10 +1,12 @@
 package kotlin_mm
 
     fun main(args: Array<String>) {
-        print("Hello World!")
 
-         var str: String? = null
+        val a1 = null
+        val a2 = 1
 
-        print(str?.length?: "Null")
+        require(a1 != null || a2 != null) {
+            "ERROR!!"
+        }
 
     }

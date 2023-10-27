@@ -1,47 +1,52 @@
-import java.util.TreeSet
 
-fun main(args: Array<String>) {
-    val debtsAre = listOf(Debt(1, 200), Debt(2, 300))
-    val debtComes = listOf(Debt(1, 100), Debt(3, 300))
+class Main {
 
-    //{Debt(1, 200), Debt(2, 300)} - table billInDebt -> ::removeIf -> {Debt(2, 300)} -> to upset 0 - на обнуление
+    fun main(args: Array<String>) {
+        println(concat("def", "fef"))
+        val num = 12L
+        val square  = {number: Long -> number * number}
 
-    //{Debt(1, 100), Debt(3, 300), Debt(1, 200)} - debt-info-s ->  -> to upset save/update
-
-
-
-    val comparator: Comparator<Debt> = Comparator.comparing(Debt::id).thenComparing(Comparator.comparing(Debt::debt))
-    val debtSet = TreeSet(comparator)
-
-//    debtSet.addAll(debtComes)
-
-    debtSet.add(Debt(1, 200))
-    debtSet.add(Debt(1, 200))
-
-    println("TreeSet is - $debtSet")
+        lFun("HW"){ s -> 12L}
 
 
+    }
+
+
+    private fun lFun(string: String, oaf: OAF): Long {
+        return 12L
+    }
+
+    private fun lFun2() = Debt(12, 12)
+
+    private fun concat(vararg str: String): String {
+        val list = arrayListOf<String>()
+        list.addAll(str)
+        return list.joinToString(".")
+    }
+
+
+    class Man(
+        var name: String,
+        val age: Long? = null
+
+    ) {
+        override fun toString(): String {
+            return "Man(name='$name', age=$age)"
+        }
+    }
+
+    class Debt(
+        val id: Long,
+        val debt: Long
+    ) {
+        override fun toString(): String {
+            return "Debt(id=$id, debt=$debt)"
+        }
+    }
 
 
 }
 
-
-
-class Man(
-    var name: String,
-    val age: Long? = null
-
-) {
-    override fun toString(): String {
-        return "Man(name='$name', age=$age)"
-    }
-}
-
-class Debt(
-    val id: Long,
-    val debt: Long
-) {
-    override fun toString(): String {
-        return "Debt(id=$id, debt=$debt)"
-    }
+fun interface OAF {
+    fun justDo(str: String): Long
 }

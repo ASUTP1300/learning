@@ -1,0 +1,78 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+!definelong NEW_PAGE(obj)
+ == obj ==
+ autonumber
+!enddefinelong
+
+
+
+!definelong colorRed(obj)
+<font color=red > obj </font>
+!enddefinelong
+
+actor UpdateJobTrigger
+/ note over UpdateJobTrigger
+    manual/cron
+end note
+
+participant DebtContractProducer
+/ note over DebtContractProducer
+end note
+
+participant ArcDebtInfo as "arc-debt-info"
+
+box DB #Green
+    participant Arcollection.billindebt#Yellow
+    participant Arcollection.debt#Yellow
+end box
+
+box Kafka #Orange
+ participant contract_debt
+end box
+
+participant DebtContractConsumer
+NEW_PAGE(producer)
+
+
+
+note over DebtContractProducer
+end note
+
+alt all success
+DebtContractProducer -> Arcollection.debt : **getAllby(colorRed(statusType is active) )**
+
+DebtContractProducer <- Arcollection.debt: Stream<Debt>
+
+
+
+loop each BillDebt
+    DebtContractProducer -> contract_debt: {DebtDTO:$DebtDTO}
+end
+
+
+NEW_PAGE(pool of consumer)
+note over DebtContractConsumer
+listen: overdue_bill
+end note
+DebtContractConsumer <- contract_debt: {DebtDTO:$DebtDTO} (ключ codebt)
+DebtContractConsumer -> ArcDebtInfo: ../web/api/overdueBills?cocontract = {:cocontract}
+
+ArcDebtInfo -> DebtContractConsumer: {List<DebtBill>}
+note over DebtContractConsumer
+1. В полученном списке могут отсутствовать счета к-рые уже были сохранены в задолженности (в billInDebt поставить в поле СУММА - 0)
+
+2. Нужно ли добавлять новые просроченные счета? (в billInDebt вставить новые счета)
+end note
+'DebtContractConsumer -> Arcollection.billindebt: upsert(BillInDebt)
+note over DebtContractConsumer
+ 1. Возможность обновить данные в таблице Debt
+ 2. Анализ возможности вывода контракта из состояния INCOLLECTION??(доп джоба)
+end note
+
+DebtContractConsumer -> Arcollection.billindebt: insert/update
+
+@enduml
