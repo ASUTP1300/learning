@@ -17,6 +17,31 @@
       <option name="url" value="http://www.datanucleus.org/downloads/maven2/" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="nexus-arfix-mvn" />
+      <option name="name" value="nexus-arfix-mvn" />
+      <option name="url" value="https://nexus.vimpelcom.ru/repository/arfix-mvn/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://nexus.vimpelcom.ru/repository/proxy__mvn__group/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="nexus-maven-all" />
+      <option name="name" value="nexus-maven-all" />
+      <option name="url" value="https://nexus.vimpelcom.ru/repository/proxy__mvn__group/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="datanucleus" />
+      <option name="name" value="datanucleus" />
+      <option name="url" value="https://datanucleus.org/downloads/maven2/oracle" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="sbt_maven" />
       <option name="name" value="sbt_maven" />
       <option name="url" value="https://dzo.sw.sbc.space/nexus-ci/repository/sbt_maven" />
@@ -25,11 +50,6 @@
       <option name="id" value="datanucleus" />
       <option name="name" value="datanucleus" />
       <option name="url" value="https://datanucleus.org/downloads/maven2/oracle/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="central" />
-      <option name="name" value="Maven Central repository" />
-      <option name="url" value="https://repo1.maven.org/maven2" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="maven_public" />
@@ -52,9 +72,9 @@
       <option name="url" value="https://repo.maven.apache.org/maven2/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="datanucleus" />
-      <option name="name" value="datanucleus" />
-      <option name="url" value="https://datanucleus.org/downloads/maven2/oracle" />
+      <option name="id" value="central" />
+      <option name="name" value="central" />
+      <option name="url" value="https://nexus.vimpelcom.ru/repository/proxy__mvn__group/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="cv" />

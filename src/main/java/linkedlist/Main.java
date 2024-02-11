@@ -9,21 +9,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-
-        Stack<Integer> stack = new Stack<>();
-        stack.add(1);
-        stack.add(2);
-        System.out.println(stack.peek());
-
-
-        Integer integer = 15;
-
-        System.out.println(integer);
-
-        ListNode listNode32 = new ListNode(3, null);
-        ListNode listNode31 = new ListNode(9, null);
-
-
         ListNode listNode11 = new ListNode(1);
         ListNode listNode12 = new ListNode(2);
         ListNode listNode13 = new ListNode(3);
@@ -41,21 +26,47 @@ public class Main {
         listNode16.next = listNode17;
         listNode17.next = null;
 
-        ListNode listNode24 = new ListNode(9);
-        ListNode listNode23 = new ListNode(9);
-        ListNode listNode22 = new ListNode(9);
-        ListNode listNode21 = new ListNode(9);
 
-        listNode21.next = listNode22;
-        listNode22.next = listNode23;
-        listNode23.next = listNode24;
-        listNode24.next = null;
+        ListNode copy = listNode11.next;
 
+        ListNode holder = listNode11;
 
-        ListNode[] listNodes = {listNode11, listNode21, listNode31};
+        holder.next = null;
+
+        System.out.println("L21" + holder);
+        System.out.println("L11 " + copy);
+        System.out.println("L20 " + copy);
 
 
-        iterateNode(reversList(listNode11));
+        ListNode buff;
+        ListNode buff2 = null;
+
+
+
+
+        while (copy != null) {
+            //buffer
+            buff = copy.next;
+
+            //buffer2
+            buff2 = copy;
+
+            buff2.next = holder;
+
+            holder = buff2;
+
+            copy = buff;
+//            copy.next = holder;
+
+
+        }
+
+        System.out.println(holder);
+
+
+
+
+
     }
 
 

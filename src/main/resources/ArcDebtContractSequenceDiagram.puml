@@ -42,7 +42,7 @@ NEW_PAGE(producer)
 note over DebtContractProducer
 end note
 
-alt all success
+alt all successdsf
 DebtContractProducer -> Arcollection.debt : **getAllby(colorRed(statusType is active) )**
 
 DebtContractProducer <- Arcollection.debt: Stream<Debt>
@@ -52,6 +52,8 @@ DebtContractProducer <- Arcollection.debt: Stream<Debt>
 loop each BillDebt
     DebtContractProducer -> contract_debt: {DebtDTO:$DebtDTO}
 end
+
+alt De
 
 
 NEW_PAGE(pool of consumer)

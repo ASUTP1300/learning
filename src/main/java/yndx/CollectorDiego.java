@@ -14,7 +14,7 @@ public class CollectorDiego {
         int[] diegoCards = Arrays.stream(reader.readLine().split(" ")).map(Integer::parseInt).distinct().sorted().mapToInt(x -> x).toArray();
 
         reader.readLine();
-        int[] friendsCards = Arrays.stream(reader.readLine().split(" ")).map(Integer::parseInt).mapToInt(x -> x).toArray();
+        int[] friendsCards = Arrays.stream(reader.readLine().split(" ")).parallel().map(Integer::parseInt).mapToInt(x -> x).toArray();
 
         FileWriter writer = new FileWriter("output.txt");
 

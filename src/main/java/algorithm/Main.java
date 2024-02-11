@@ -6,6 +6,12 @@ import java.util.Queue;
 public class Main {
     public static void main(String[] args) {
 
+        int i1 = 1200;
+        Integer i2 =  new Integer(1200);
+
+        System.out.println(i1 == i2);
+
+
         for(int i = 1; i < 100; i++){
             if(checkNumber(i)){
                 System.out.println("Простое чилос:\t" + i);
